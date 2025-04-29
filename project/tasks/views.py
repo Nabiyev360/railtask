@@ -1,4 +1,6 @@
 from datetime import datetime
+from django.utils import timezone
+from datetime import timedelta
 
 from django.db.models import Q
 from django.shortcuts import redirect, render
@@ -15,14 +17,50 @@ def index_view(request):
 
 class TaskListView(ListView):
     def get(self, request, *args, **kwargs):
-        tasks = Task.objects.all()
-        # tasks = Task.objects.filter(author__id=request.user.profile.id)
         exclude_role_names = ['tchzg',]
         performers = Profile.objects.filter(~Q(roles__name__in=exclude_role_names))
-        return render(request, "tasks/tasks.html", {"tasks": tasks, "performers": performers})
+
+        # profile = request.user.profile
+
+        today = timezone.now().date()
+        tomorrow = today + timedelta(days=1)
+
+        tasks = Task.objects.all().exclude(status='completed').order_by('deadline')
+
+        grouped_tasks = {}
+
+        for task in tasks:
+            deadline_date = task.deadline
+            if deadline_date == today:
+                key = 'Bugun'
+            elif deadline_date == tomorrow:
+                key = 'Ertaga'
+            elif deadline_date:
+                key = deadline_date.strftime('%d.%m.%Y')
+            else:
+                key = 'Muddatsiz'  # deadline belgilanmagan topshiriqlar uchun
+
+            if key not in grouped_tasks:
+                grouped_tasks[key] = []
+            grouped_tasks[key].append(task)
+
+        return render(request, 'tasks/tasks.html', {'grouped_tasks': grouped_tasks, "performers": performers})
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @csrf_exempt
-def create_task_veiw(request):
+def create_task_view(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
