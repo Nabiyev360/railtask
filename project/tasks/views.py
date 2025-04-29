@@ -9,6 +9,9 @@ from profiles.models import Profile, Role
 from .models import Task
 
 
+def index_view(request):
+    return redirect('/tasks/')
+
 
 class TaskListView(ListView):
     def get(self, request, *args, **kwargs):
@@ -19,12 +22,12 @@ class TaskListView(ListView):
         return render(request, "tasks/tasks.html", {"tasks": tasks, "performers": performers})
 
 @csrf_exempt
-def create_task(request):
+def create_task_veiw(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         description = request.POST.get('description')
-        started = datetime.strptime(request.POST.get('started'), "%m/%d/%Y").date()
-        deadline = datetime.strptime(request.POST.get('deadline'), "%m/%d/%Y").date()
+        started = datetime.strptime(request.POST.get('started'), "%Y-%m-%d").date()
+        deadline = datetime.strptime(request.POST.get('deadline'), "%Y-%m-%d").date()
         degree = request.POST.get('degree')
         performer_ids = request.POST.get('performers')
 
@@ -47,3 +50,10 @@ def create_task(request):
             messages.success(request, 'Task muvaffaqiyatli yaratildi!')
 
     return redirect('/tasks')
+
+
+def delete_task_veiw(request, task_id):
+    task = Task.objects.get(id=task_id)
+    task.delete()
+    return redirect('/tasks')
+
