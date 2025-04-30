@@ -469,7 +469,6 @@
                                                        for="customCheckTask{{task.id}}"></label>
                                             </div>
                                             <div class="d-flex align-items-center gap-3">
-                                                <div class="lh-base"><i class="feather-star"></i></div>
                                                 <a href="javascript:void(0);" class="single-task-list-link"
                                                    data-bs-toggle="offcanvas" data-bs-target="#tasksDetailsOffcanvas{{task.id}}">
                                                     <div class="fs-13 fw-bold text-truncate-1-line">{{ task.title }}<span class="ms-2 badge bg-soft-danger text-danger">Muhim</span>
@@ -985,30 +984,23 @@
 <!--            </div>-->
         </div>
         <!--! END: Notes !-->
-<!--        <hr class="my-5">-->
+        <hr class="my-5">
         <!--! BEGIN: Checklist !-->
-<!--        <div class="checklist">-->
-<!--            <div class="d-flex justify-content-between mb-4">-->
-<!--                <div>-->
-<!--                    <h2 class="fs-16 fw-bold mb-1">Checklist</h2>-->
+        <div class="checklist">
+            <div class="d-flex justify-content-between mb-4">
+                <div>
+                    <h2 class="fs-16 fw-bold mb-1">Ijrochilar</h2>
 <!--                    <span class="fs-12 text-muted">Issues found checklist</span>-->
-<!--                </div>-->
-<!--                <a href="javascript:void(0);" class="avatar-text avatar-md">-->
-<!--                    <i class="feather-info"></i>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            <ul class="list-unstyled" id="checklist">-->
-<!--                <li class="checked">Tested, debugged, and shipped 10s of 1000s of lines of code to various development-->
-<!--                    teams.-->
-<!--                </li>-->
-<!--                <li>Introduced Kanban Board style ticketing system to promote highly.</li>-->
-<!--                <li>Utilized HTML, CSS, and JavaScript to create 100+ responsive landing pages for both company and-->
-<!--                    client.-->
-<!--                </li>-->
-<!--                <li class="checked">Rewrote HTML to meet industry and company standards for SEO and Accessibility.</li>-->
-<!--                <li>Led bi-weekly stand-up to ensure team worked effectively.</li>-->
-<!--                <li>Worked with Quality Assurance to get new pages/products tested.</li>-->
-<!--            </ul>-->
+                </div>
+                <a href="javascript:void(0);" class="avatar-text avatar-md">
+                    <i class="feather-info"></i>
+                </a>
+            </div>
+            <ul class="list-unstyled" id="">
+                {% for performer in task.performers.all %}
+                    <li>{{ performer.full_name }}</li>
+                {% endfor %}
+            </ul>
 <!--            <div class="input-group mt-3">-->
 <!--                <input id="checklistInput" type="text" class="form-control" placeholder="Title...">-->
 <!--                <a href="javascript:void(0)" class="input-group-text addCheckList" onclick="newElement()">-->
@@ -1016,8 +1008,8 @@
 <!--                    <span>Add Checklist</span>-->
 <!--                </a>-->
 <!--            </div>-->
-<!--        </div>-->
-        <!--! END: Checklist !-->
+        </div>
+<!--        ! END: Checklist !-->
 <!--        <hr class="my-5">-->
         <!--! BEGIN: Comments !-->
 <!--        <div class="comments">-->
