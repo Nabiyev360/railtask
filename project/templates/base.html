@@ -53,7 +53,7 @@
             <div class="navbar-content">
                 <ul class="nxl-navbar">
                     <li class="nxl-item nxl-caption">
-                        <label>Navigation</label>
+                        <label>Menyu</label>
                     </li>
 <!--                    <li class="nxl-item nxl-hasmenu">-->
 <!--                        <a href="javascript:void(0);" class="nxl-link">-->
@@ -80,13 +80,15 @@
                     <li class="nxl-item nxl-hasmenu">
                         <a href="javascript:void(0);" class="nxl-link">
                             <span class="nxl-micon"><i class="feather-send"></i></span>
-                            <span class="nxl-mtext">Menyu</span><span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
+                            <span class="nxl-mtext">Topshiriqlar</span><span class="nxl-arrow"><i class="feather-chevron-right"></i></span>
                         </a>
                         <ul class="nxl-submenu">
 <!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-chat.html">Chat</a></li>-->
 <!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-email.html">Email</a></li>-->
-                            <li class="nxl-item"><a class="nxl-link" href="/tasks">Tasks</a></li>
-<!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-notes.html">Notes</a></li>-->
+                            {%  if request.user.profile.position == "Bosh muhandis o'rinbosari" %}
+                                <li class="nxl-item"><a class="nxl-link" href="/tasks">Mening topshiriqlarim</a></li>
+                            {%  endif %}
+                            <li class="nxl-item"><a class="nxl-link" href="/tasks">Bajarish kerak</a></li>
 <!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-storage.html">Storage</a></li>-->
 <!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-calendar.html">Calendar</a></li>-->
                         </ul>
@@ -394,8 +396,8 @@
                                                 <img src="{% static 'assets/images/avatar/1.png' %}" alt="" class="img-fluid">
                                             </div>
                                             <div>
-                                                <a href="javascript:void(0);" class="font-body fw-bold d-block mb-1">Alexandra Della</a>
-                                                <p class="fs-11 text-muted mb-0">alex.della@outlook.com</p>
+                                                <a href="javascript:void(0);" class="font-body fw-bold d-block mb-1">{{ request.user.profile.full_name }}</a>
+                                                <p class="fs-11 text-muted mb-0">{{ request.user.profile.position.description }}</p>
                                             </div>
                                         </div>
                                         <a href="javascript:void(0);" class="avatar-text avatar-md">
@@ -573,7 +575,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-timesheets-menu">
                             <div class="d-flex justify-content-between align-items-center timesheets-head">
-                                <h6 class="fw-bold text-dark mb-0">Timesheets</h6>
+                                <h6 class="fw-bold text-dark mb-0">Muhlatlar</h6>
                                 <a href="javascript:void(0);" class="fs-11 text-success text-end ms-auto" data-bs-toggle="tooltip" title="Upcomming Timers">
                                     <i class="feather-clock"></i>
                                     <span>3 Upcomming</span>
@@ -585,7 +587,7 @@
                                 <a href="javascript:void(0);" class="btn btn-sm btn-primary">Started Timer</a>
                             </div>
                             <div class="text-center timesheets-footer">
-                                <a href="javascript:void(0);" class="fs-13 fw-semibold text-dark">Alls Timesheets</a>
+                                <a href="javascript:void(0);" class="fs-13 fw-semibold text-dark">Barcha muhlatlar</a>
                             </div>
                         </div>
                     </div>
@@ -596,10 +598,10 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-notifications-menu">
                             <div class="d-flex justify-content-between align-items-center notifications-head">
-                                <h6 class="fw-bold text-dark mb-0">Notifications</h6>
-                                <a href="javascript:void(0);" class="fs-11 text-success text-end ms-auto" data-bs-toggle="tooltip" title="Make as Read">
+                                <h6 class="fw-bold text-dark mb-0">Bildirishnomalar</h6>
+                                <a href="javascript:void(0);" class="fs-11 text-success text-end ms-auto" data-bs-toggle="tooltip" title="Barchasi o'qildi">
                                     <i class="feather-check"></i>
-                                    <span>Make as Read</span>
+                                    <span>Barchasi o'qildi</span>
                                 </a>
                             </div>
                             <div class="notifications-item">
@@ -648,7 +650,7 @@
                                 </div>
                             </div>
                             <div class="text-center notifications-footer">
-                                <a href="javascript:void(0);" class="fs-13 fw-semibold text-dark">Alls Notifications</a>
+                                <a href="javascript:void(0);" class="fs-13 fw-semibold text-dark">Barcha bildirishnomalar</a>
                             </div>
                         </div>
                     </div>
@@ -661,8 +663,8 @@
                                 <div class="d-flex align-items-center">
                                     <img src="{% static 'assets/images/avatar/1.png' %}" alt="user-image" class="img-fluid user-avtar">
                                     <div>
-                                        <h6 class="text-dark mb-0">Alexandra Della <span class="badge bg-soft-success text-success ms-1">PRO</span></h6>
-                                        <span class="fs-12 fw-medium text-muted">alex.della@outlook.com</span>
+                                        <h6 class="text-dark mb-0">{{ request.user.profile.full_name }}<span class="badge bg-soft-success text-success ms-1">PRO</span></h6>
+                                        <span class="fs-12 fw-medium text-muted">{{ request.user.profile.position }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -785,9 +787,9 @@
                                 <span>Account Settings</span>
                             </a>
                             <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
+                            <a href="{% url 'auths:logout' %}" class="dropdown-item">
                                 <i class="feather-log-out"></i>
-                                <span>Logout</span>
+                                <span>Chiqish</span>
                             </a>
                         </div>
                     </div>
@@ -1029,7 +1031,7 @@
         </div>
         <div class="customizer-sidebar-wrapper">
             <div class="customizer-sidebar-header px-4 ht-80 border-bottom d-flex align-items-center justify-content-between">
-                <h5 class="mb-0">Theme Settings</h5>
+                <h5 class="mb-0">Dizayn sozlamalari</h5>
                 <a href="javascript:void(0);" class="cutomizer-close-trigger d-flex">
                     <i class="feather-x"></i>
                 </a>
@@ -1037,7 +1039,7 @@
             <div class="customizer-sidebar-body position-relative p-4" data-scrollbar-target="#psScrollbarInit">
                 <!--! BEGIN: [Navigation] !-->
                 <div class="position-relative px-3 pb-3 pt-4 mt-3 mb-5 border border-gray-2 theme-options-set">
-                    <label class="py-1 px-2 fs-8 fw-bold text-uppercase text-muted text-spacing-2 bg-white border border-gray-2 position-absolute rounded-2 options-label" style="top: -12px">Navigation</label>
+                    <label class="py-1 px-2 fs-8 fw-bold text-uppercase text-muted text-spacing-2 bg-white border border-gray-2 position-absolute rounded-2 options-label" style="top: -12px">Menyu</label>
                     <div class="row g-2 theme-options-items app-navigation" id="appNavigationList">
                         <div class="col-6 text-center single-option">
                             <input type="radio" class="btn-check" id="app-navigation-light" name="app-navigation" value="1" data-app-navigation="app-navigation-light" checked>

@@ -22,8 +22,21 @@ class Task(models.Model):
     started = models.DateField(null=True, blank=True)
     deadline = models.DateField(null=True, blank=True)
     degree = models.IntegerField(null=True, blank=True)
+    archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.title
+
+
+class TaskComment(models.Model):
+    author = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='comments')
+    comment = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    edited_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.comment
+
+

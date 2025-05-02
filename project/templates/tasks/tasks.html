@@ -87,39 +87,39 @@
                             </a>
                         </li>
                     </ul>
-                    <ul class="nav flex-column nxl-content-sidebar-item">
-                        <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">
-                            <span>Overview</span>
-                            <a href="javascript:void(0);">
-                                <span class="avatar-text avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                      title="Add New"> <i class="feather-plus"></i> </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <i class="feather-hash"></i>
-                                <span>Umumiy</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <i class="feather-hash"></i>
-                                <span>Mening topshiriqlarim</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <i class="feather-hash"></i>
-                                <span>Jamoaviy</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <i class="feather-hash"></i>
-                                <span>Induvidal</span>
-                            </a>
-                        </li>
-                    </ul>
+<!--                    <ul class="nav flex-column nxl-content-sidebar-item">-->
+<!--                        <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">-->
+<!--                            <span>Overview</span>-->
+<!--                            <a href="javascript:void(0);">-->
+<!--                                <span class="avatar-text avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover"-->
+<!--                                      title="Add New"> <i class="feather-plus"></i> </span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="javascript:void(0);">-->
+<!--                                <i class="feather-hash"></i>-->
+<!--                                <span>Umumiy</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="javascript:void(0);">-->
+<!--                                <i class="feather-hash"></i>-->
+<!--                                <span>Mening topshiriqlarim</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="javascript:void(0);">-->
+<!--                                <i class="feather-hash"></i>-->
+<!--                                <span>Jamoaviy</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="javascript:void(0);">-->
+<!--                                <i class="feather-hash"></i>-->
+<!--                                <span>Induvidal</span>-->
+<!--                            </a>-->
+<!--                        </li>-->
+<!--                    </ul>-->
                 </div>
             </div>
             <!-- [ Content Sidebar  ] end -->
@@ -443,20 +443,22 @@
 <!--                        </div>-->
 <!--                    </div>-->
 <!--                </div>-->
-                <div class="content-area-body">
+                <div class="content-area-body" style="min-height: 93%;">
+                    {% if request.user.profile.position == "Bosh muhandis o'rinbosari" %}
                     <div class="card stretch stretch-full">
                         <a href="javascript:void(0);" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#addNewTasks">
                             <i class="feather-plus me-2"></i>
                             <span>Qo'shish</span>
                         </a>
                     </div>
+                    {% endif %}
                     {% for date_label, tasks in grouped_tasks.items %}
                     <div class="card stretch stretch-full">
                         <a href="javascript:void(0);" class="card-header" data-bs-toggle="collapse"
-                           data-bs-target="#tasks_collapse_1">
+                           data-bs-target="#tasks_collapse_{{forloop.counter}}">
                             <h5 class="mb-0">{{ date_label }}</h5>
                         </a>
-                        <div class="card-body collapse show" id="tasks_collapse_1">
+                        <div class="card-body collapse show" id="tasks_collapse_{{forloop.counter}}">
                             <ul class="list-unstyled mb-0">
                                 {% for task in tasks %}
                                 <li class="single-task-list p-3 mb-3 border border-dashed rounded-3">
@@ -480,9 +482,9 @@
                                         </div>
                                         <div class="d-flex flex-shrink-0 align-items-center gap-3">
                                             <div class="badge bg-soft-primary text-primary d-md-inline-block d-none">
-                                                Dastur
+                                                {{ task.started|date:'d.m.Y' }}
                                             </div>
-                                            <div class="d-md-inline-block d-none me-3">29.04.2025</div>
+                                            <div class="d-md-inline-block d-none me-3"></div>
                                             <div class="avatar-image avatar-md d-sm-inline-block d-none">
                                                 <img src="{% static 'assets/images/avatar/1.png' %}" alt="user"
                                                      class="img-fluid">
@@ -493,8 +495,8 @@
                                                     <i class="feather-more-vertical"></i>
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-end">
+                                                    <a class="dropdown-item view-task" href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#tasksDetailsOffcanvas{{task.id}}">Ko'rish</a>
                                                     <a class="dropdown-item edit-task" href="#">O'zgaritish</a>
-                                                    <a class="dropdown-item view-task" href="#">Ko'rish</a>
                                                     <a class="dropdown-item delete-task" href="{% url 'tasks:delete_task' task.id %}">O'chirish</a>
                                                 </div>
                                             </div>
@@ -1012,317 +1014,85 @@
 <!--        ! END: Checklist !-->
 <!--        <hr class="my-5">-->
         <!--! BEGIN: Comments !-->
-<!--        <div class="comments">-->
-<!--            <div class="d-flex justify-content-between mb-4">-->
-<!--                <div>-->
-<!--                    <h2 class="fs-16 fw-700 mb-1">Comments</h2>-->
-<!--                    <small class="text-muted">Responses for this tasks</small>-->
-<!--                </div>-->
-<!--                <a href="javascript:void(0);" class="avatar-text avatar-md">-->
-<!--                    <i class="feather-info"></i>-->
-<!--                </a>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;! BEGIN: comment !&ndash;&gt;-->
-<!--            <div class="d-flex mb-4">-->
-<!--                <div class="avatar-image me-3">-->
-<!--                    <a href="javascript:void(0);">-->
-<!--                        <img src="{% static 'assets/images/avatar/1.png' %}" class="img-fluid" alt="">-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <div class="">-->
-<!--                    <a href="javascript:void(0);" class="mb-1 d-flex align-items-center">-->
-<!--                        <span>Alexandra Della</span>-->
-<!--                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2 d-none d-sm-block"></span>-->
-<!--                        <span class="fs-10 text-uppercase text-muted d-none d-sm-block">57 Min Ago</span>-->
-<!--                    </a>-->
-<!--                    <div class="d-flex align-items-center">-->
-<!--                        <p class="fs-12 text-dark p-3 bg-gray-200 rounded-3 mb-0">Removed demands expense account in-->
-<!--                            outward tedious do. Particular way thoroughly unaffected projection.</p>-->
-<!--                        <div class="dropdown ms-2">-->
-<!--                            <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown">-->
-<!--                                <i class="feather-more-vertical fs-10"></i>-->
-<!--                            </a>-->
-<!--                            <ul class="dropdown-menu dropdown-menu-end">-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-bell-off fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Mute</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-eye-off fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Hide</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="dropdown-divider"></li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-slash fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Block</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-flag fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Report</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="fs-10 text-uppercase d-flex align-items-center mt-2">-->
-<!--                        <a href="javascript:void(0);" class="text-muted">Like (6)</a>-->
-<!--                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2"></span>-->
-<!--                        <a href="javascript:void(0);" class="text-muted">Reply</a>-->
-<!--                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2"></span>-->
-<!--                        <a href="javascript:void(0);" class="text-muted">5 Replies</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;! BEGIN: reply !&ndash;&gt;-->
-<!--            <div class="ms-4">-->
-<!--                <div class="ms-4">-->
-<!--                    &lt;!&ndash;! BEGIN: single-reply !&ndash;&gt;-->
-<!--                    <div class="d-flex mb-4">-->
-<!--                        <div class="avatar-image me-3">-->
-<!--                            <a href="javascript:void(0);">-->
-<!--                                <img src="{% static 'assets/images/avatar/3.png' %}" class="img-fluid" alt="">-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                        <div class="">-->
-<!--                            <a href="javascript:void(0);" class="mb-1 d-flex align-items-center">-->
-<!--                                <span>Marianne Audrey</span>-->
-<!--                                <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2 d-none d-sm-block"></span>-->
-<!--                                <span class="fs-10 text-uppercase text-muted d-none d-sm-block">50 Min Ago</span>-->
-<!--                            </a>-->
-<!--                            <div class="d-flex align-items-center">-->
-<!--                                <p class="fs-12 text-dark p-3 bg-gray-200 rounded-3 mb-0">Wishing calling is warrant-->
-<!--                                    settled was lucky.</p>-->
-<!--                                <div class="dropdown ms-2">-->
-<!--                                    <a href="javascript:void(0);" class="avatar-text avatar-sm"-->
-<!--                                       data-bs-toggle="dropdown">-->
-<!--                                        <i class="feather-more-vertical fs-10"></i>-->
-<!--                                    </a>-->
-<!--                                    <ul class="dropdown-menu dropdown-menu-end">-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-bell-off fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Mute</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-eye-off fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Hide</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                        <li class="dropdown-divider"></li>-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-slash fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Block</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-flag fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Report</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                    </ul>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="fs-10 text-uppercase d-flex align-items-center mt-2">-->
-<!--                                <a href="javascript:void(0);" class="text-muted">Like</a>-->
-<!--                                <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2"></span>-->
-<!--                                <a href="javascript:void(0);" class="text-muted">Reply</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    &lt;!&ndash;! BEGIN: single-reply !&ndash;&gt;-->
-<!--                    <div class="d-flex mb-4">-->
-<!--                        <div class="avatar-image me-3">-->
-<!--                            <a href="javascript:void(0);">-->
-<!--                                <img src="{% static 'assets/images/avatar/2.png' %}" class="img-fluid" alt="">-->
-<!--                            </a>-->
-<!--                        </div>-->
-<!--                        <div class="">-->
-<!--                            <a href="javascript:void(0);" class="mb-1 d-flex align-items-center">-->
-<!--                                <span>Curtis Green</span>-->
-<!--                                <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2 d-none d-sm-block"></span>-->
-<!--                                <span class="fs-10 text-uppercase text-muted d-none d-sm-block">45 Min Ago</span>-->
-<!--                            </a>-->
-<!--                            <div class="d-flex align-items-center">-->
-<!--                                <p class="fs-12 text-dark p-3 bg-gray-200 rounded-3 mb-0">Removed demands expense-->
-<!--                                    account in outward tedious do. Particular way thoroughly unaffected projection.</p>-->
-<!--                                <div class="dropdown ms-2">-->
-<!--                                    <a href="javascript:void(0);" class="avatar-text avatar-sm"-->
-<!--                                       data-bs-toggle="dropdown">-->
-<!--                                        <i class="feather-more-vertical fs-10"></i>-->
-<!--                                    </a>-->
-<!--                                    <ul class="dropdown-menu dropdown-menu-end">-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-bell-off fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Mute</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-eye-off fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Hide</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                        <li class="dropdown-divider"></li>-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-slash fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Block</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                        <li>-->
-<!--                                            <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                                <i class="feather-flag fs-10 me-3"></i>-->
-<!--                                                <span class="fs-11">Report</span>-->
-<!--                                            </a>-->
-<!--                                        </li>-->
-<!--                                    </ul>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                            <div class="fs-10 text-uppercase d-flex align-items-center mt-2">-->
-<!--                                <a href="javascript:void(0);" class="text-muted">Like (2)</a>-->
-<!--                                <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2"></span>-->
-<!--                                <a href="javascript:void(0);" class="text-muted">Reply</a>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="ms-4 mb-4">-->
-<!--                        <a href="javascript:void(0);" class="d-flex align-items-center text-muted">-->
-<!--                            <i class="feather-more-horizontal fs-12"></i>-->
-<!--                            <span class="fs-10 text-uppercase ms-2 text-truncate-1-line">Load More Replies</span>-->
-<!--                        </a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;! BEGIN: comment !&ndash;&gt;-->
-<!--            <div class="d-flex mb-4">-->
-<!--                <div class="avatar-image me-3">-->
-<!--                    <a href="javascript:void(0);">-->
-<!--                        <img src="{% static 'assets/images/avatar/4.png' %}" class="img-fluid" alt="">-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <div class="">-->
-<!--                    <a href="javascript:void(0);" class="mb-1 d-flex align-items-center">-->
-<!--                        <span>Holland Scott</span>-->
-<!--                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2 d-none d-sm-block"></span>-->
-<!--                        <span class="fs-10 text-uppercase text-muted d-none d-sm-block">42 Min Ago</span>-->
-<!--                    </a>-->
-<!--                    <div class="d-flex align-items-center">-->
-<!--                        <p class="fs-12 text-dark p-3 bg-gray-200 rounded-3 mb-0">See resolved goodness felicity shy-->
-<!--                            civility domestic had but Drawings offended yet answered Jennings perceive.</p>-->
-<!--                        <div class="dropdown ms-2">-->
-<!--                            <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown">-->
-<!--                                <i class="feather-more-vertical fs-10"></i>-->
-<!--                            </a>-->
-<!--                            <ul class="dropdown-menu dropdown-menu-end">-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-bell-off fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Mute</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-eye-off fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Hide</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="dropdown-divider"></li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-slash fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Block</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-flag fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Report</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="fs-10 text-uppercase d-flex align-items-center mt-2">-->
-<!--                        <a href="javascript:void(0);" class="text-muted">Like (8)</a>-->
-<!--                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2"></span>-->
-<!--                        <a href="javascript:void(0);" class="text-muted">Reply</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            &lt;!&ndash;! BEGIN: comment !&ndash;&gt;-->
-<!--            <div class="d-flex mb-4">-->
-<!--                <div class="avatar-image me-3">-->
-<!--                    <a href="javascript:void(0);">-->
-<!--                        <img src="{% static 'assets/images/avatar/5.png' %}" class="img-fluid" alt="">-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <div class="">-->
-<!--                    <a href="javascript:void(0);" class="mb-1 d-flex align-items-center">-->
-<!--                        <span>Olive Delarosa</span>-->
-<!--                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2 d-none d-sm-block"></span>-->
-<!--                        <span class="fs-10 text-uppercase text-muted d-none d-sm-block">34 Min Ago</span>-->
-<!--                    </a>-->
-<!--                    <div class="d-flex align-items-center">-->
-<!--                        <p class="fs-12 text-dark p-3 bg-gray-200 rounded-3 mb-0">Dependent on so extremely delivered-->
-<!--                            by. Yet no jokes worse her why.</p>-->
-<!--                        <div class="dropdown ms-2">-->
-<!--                            <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown">-->
-<!--                                <i class="feather-more-vertical fs-10"></i>-->
-<!--                            </a>-->
-<!--                            <ul class="dropdown-menu dropdown-menu-end">-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-bell-off fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Mute</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-eye-off fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Hide</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li class="dropdown-divider"></li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-slash fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Block</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                                <li>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-flag fs-10 me-3"></i>-->
-<!--                                        <span class="fs-11">Report</span>-->
-<!--                                    </a>-->
-<!--                                </li>-->
-<!--                            </ul>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="fs-10 text-uppercase d-flex align-items-center mt-2">-->
-<!--                        <a href="javascript:void(0);" class="text-muted">Like (8)</a>-->
-<!--                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2"></span>-->
-<!--                        <a href="javascript:void(0);" class="text-muted">Reply</a>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="pt-4">-->
-<!--                <label class="mb-1">Add Comment</label>-->
-<!--                <textarea rows="5" class="form-control" placeholder="Your comment...."></textarea>-->
-<!--                <a href="javascript:void(0);" class="btn btn-primary d-inline-block mt-4">Add Comment</a>-->
-<!--            </div>-->
-<!--        </div>-->
+
+        <div class="pt-4">
+            <form action="{% url 'tasks:task_comment' task.id %}" method="post">
+                {% csrf_token %}
+                <h5 class="mb-1">Topshiriq bo'yicha xabar yuborish</h5>
+                <textarea name="comment" rows="5" class="form-control" placeholder="Topshiriq muvaffaqiyatli bajarildi..."></textarea>
+                <button type="submit" class="btn btn-success d-inline-block mt-4">Yuborish</button>
+                <br>
+            </form>
+                <button type="button" class="btn btn-primary d-inline-block mt-4">Qo'shimcha muddat so'rash</button>
+        </div>
+        <hr class="my-5">
+        <div class="comments">
+            <div class="d-flex justify-content-between mb-4">
+                <div>
+                    <h2 class="fs-16 fw-700 mb-1">Xabarlar</h2>
+<!--                    <small class="text-muted">Topshiriq bo'yicha</small>-->
+                </div>
+                <a href="javascript:void(0);" class="avatar-text avatar-md">
+                    <i class="feather-info"></i>
+                </a>
+            </div>
+            {% for obj in task.comments.all %}
+            <div class="d-flex mb-4">
+                <div class="avatar-image me-3">
+                    <a href="javascript:void(0);">
+                        <img src="{% static 'assets/images/avatar/4.png' %}" class="img-fluid" alt="">
+                    </a>
+                </div>
+                <div class="">
+                    <a href="javascript:void(0);" class="mb-1 d-flex align-items-center">
+                        <span>{{ obj.author.full_name }}</span>
+                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2 d-none d-sm-block"></span>
+                        <span class="fs-10 text-uppercase text-muted d-none d-sm-block">{{ obj.created_at|date:'d.m.Y H:i' }}</span>
+                    </a>
+                    <div class="d-flex align-items-center">
+                        <p class="fs-12 text-dark p-3 bg-gray-200 rounded-3 mb-0">{{ obj.comment }}</p>
+                        <div class="dropdown ms-2">
+                            <a href="javascript:void(0);" class="avatar-text avatar-sm" data-bs-toggle="dropdown">
+                                <i class="feather-more-vertical fs-10"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end">
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i class="feather-bell-off fs-10 me-3"></i>
+                                        <span class="fs-11">Mute</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i class="feather-eye-off fs-10 me-3"></i>
+                                        <span class="fs-11">Hide</span>
+                                    </a>
+                                </li>
+                                <li class="dropdown-divider"></li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i class="feather-slash fs-10 me-3"></i>
+                                        <span class="fs-11">Block</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i class="feather-flag fs-10 me-3"></i>
+                                        <span class="fs-11">Report</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="fs-10 text-uppercase d-flex align-items-center mt-2">
+                        <a href="javascript:void(0);" class="text-muted">O'chirish</a>
+                        <span class="wd-3 ht-3 bg-gray-500 rounded-circle d-flex mx-2"></span>
+                        <a href="javascript:void(0);" class="text-muted">Javob berish</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
         <!--! END: Comments !-->
     </div>
 </div>
