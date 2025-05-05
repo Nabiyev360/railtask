@@ -99,7 +99,7 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -117,3 +117,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/auths/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/auths/login'
+
+
+# CSRF va xavfsizlikka oid sozlamalar
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://a809-83-222-6-187.ngrok-free.app',
+]
+
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False

@@ -24,25 +24,25 @@
                 <div class="content-sidebar-body">
                     <ul class="nav flex-column nxl-content-sidebar-item">
                         <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
+                            <a class="nav-link" href="{% url 'tasks:task_list' %}">
                                 <i class="feather-list"></i>
-                                <span>Yangi</span>
+                                <span>Barchasi</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
+                            <a class="nav-link" href="{% url 'tasks:task_list' %}?status=expired">
                                 <i class="feather-watch"></i>
                                 <span>Muddati o'tgan</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
+                            <a class="nav-link" href="{% url 'tasks:task_list' %}?status=in_progress">
                                 <i class="feather-activity"></i>
                                 <span>Jarayonda</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
+                            <a class="nav-link" href="{% url 'tasks:task_list' %}?status=completed">
                                 <i class="feather-check-circle"></i>
                                 <span>Bajarilgan</span>
                             </a>
@@ -50,7 +50,7 @@
                     </ul>
                     <ul class="nav flex-column nxl-content-sidebar-item">
                         <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">
-                            <span>Priority</span>
+                            <span>Darajasi</span>
                             <a href="javascript:void(0);">
                                 <span class="avatar-text avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover"
                                       title="Add New"> <i class="feather-plus"></i> </span>
@@ -482,7 +482,7 @@
                                         </div>
                                         <div class="d-flex flex-shrink-0 align-items-center gap-3">
                                             <div class="badge bg-soft-primary text-primary d-md-inline-block d-none">
-                                                {{ task.started|date:'d.m.Y' }}
+                                                {{ task.deadline|date:'H:i' }}
                                             </div>
                                             <div class="d-md-inline-block d-none me-3"></div>
                                             <div class="avatar-image avatar-md d-sm-inline-block d-none">
@@ -701,9 +701,7 @@
                     <div id="taskDateRangeAdd" class="mb-4">
                         <label class="form-label">Topshiriq muddati</label>
                         <div class="input-group date input-daterange">
-                            <input type="date" class="form-control" placeholder="dan" name="started" autocomplete="off" required>
-                            <span class="input-group-text">-</span>
-                            <input type="date" class="form-control" placeholder="gacha" name="deadline" autocomplete="off" required>
+                            <input type="datetime-local" class="form-control" placeholder="gacha" name="deadline" autocomplete="off" required>
                         </div>
                     </div>
     <!--                <div class="form-group mb-4">-->
@@ -763,7 +761,7 @@
             <span class="vr text-muted mx-4"></span>
             <a href="javascript:void(0);">
                 <h2 class="fs-14 fw-bold text-truncate-1-line">{{ task.title }}</h2>
-                <span class="fs-12 fw-normal text-muted text-truncate-1-line">{{ task.started|date:'d.m.Y' }} dan - {{ task.deadline|date:'d.m.Y' }} gacha</span>
+                <span class="fs-12 fw-normal text-muted text-truncate-1-line">{{ task.deadline|date:'d.m.Y H:i' }} gacha</span>
             </a>
         </div>
         <div class="d-none d-md-flex gap-1 align-items-center justify-content-center">
@@ -1012,19 +1010,7 @@
 <!--            </div>-->
         </div>
 <!--        ! END: Checklist !-->
-<!--        <hr class="my-5">-->
         <!--! BEGIN: Comments !-->
-
-        <div class="pt-4">
-            <form action="{% url 'tasks:task_comment' task.id %}" method="post">
-                {% csrf_token %}
-                <h5 class="mb-1">Topshiriq bo'yicha xabar yuborish</h5>
-                <textarea name="comment" rows="5" class="form-control" placeholder="Topshiriq muvaffaqiyatli bajarildi..."></textarea>
-                <button type="submit" class="btn btn-success d-inline-block mt-4">Yuborish</button>
-                <br>
-            </form>
-                <button type="button" class="btn btn-primary d-inline-block mt-4">Qo'shimcha muddat so'rash</button>
-        </div>
         <hr class="my-5">
         <div class="comments">
             <div class="d-flex justify-content-between mb-4">
@@ -1094,6 +1080,16 @@
             {% endfor %}
         </div>
         <!--! END: Comments !-->
+        <div class="pt-0">
+            <form action="{% url 'tasks:task_comment' task.id %}" method="post">
+                {% csrf_token %}
+{#                <h5 class="mb-1">Topshiriq bo'yicha xabar yuborish</h5>#}
+                <textarea name="comment" rows="5" class="form-control" placeholder="Topshiriq muvaffaqiyatli bajarildi..."></textarea>
+                <button type="submit" class="btn btn-success d-inline-block mt-4">Yuborish</button>
+                <br>
+            </form>
+                <button type="button" class="btn btn-primary d-inline-block mt-4">Qo'shimcha muddat so'rash</button>
+        </div>
     </div>
 </div>
 {% endfor %}

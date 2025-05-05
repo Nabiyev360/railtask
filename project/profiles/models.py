@@ -13,5 +13,6 @@ class Profile(models.Model):
     full_name = models.CharField(max_length=50)
     position = models.CharField(max_length=150)
     roles = models.ManyToManyField(Role)
+    tg_id = models.IntegerField(null=True, blank=True)
     def __str__(self):
         return self.full_name

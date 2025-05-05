@@ -10,7 +10,7 @@ class Task(models.Model):
         ('in_progress', 'Bajarilmoqda'),
         ('completed', 'Bajarildi'),
         ('approved', 'Tasdiqlandi'),
-        ('failed', 'Bajarilmadi'),
+        ('expired', 'Bajarilmadi'),
         ('returned', 'Qayta ishlashga yuborildi'),
     ]
 
@@ -19,8 +19,8 @@ class Task(models.Model):
     description = models.TextField(null=True, blank=True)
     performers = models.ManyToManyField(Profile, related_name='performers')
     status = models.CharField(max_length=50, choices=STATUS_CHOICES)
-    started = models.DateField(null=True, blank=True)
-    deadline = models.DateField(null=True, blank=True)
+    received = models.DateField(null=True, blank=True)
+    deadline = models.DateTimeField(null=True, blank=True)
     degree = models.IntegerField(null=True, blank=True)
     archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -38,5 +38,3 @@ class TaskComment(models.Model):
     edited_at = models.DateTimeField(auto_now=True)
     def __str__(self):
         return self.comment
-
-
