@@ -14,6 +14,14 @@ class Task(models.Model):
         ('returned', 'Qayta ishlashga yuborildi'),
     ]
 
+    DEGREE_CHOICES = [
+        ('info', "Ma'lumot uchun"),
+        ('medium', "O'rtacha"),
+        ('important', "Muhim"),
+        ('very_important', "Juda muhim"),
+        ('urgent', "Tezkor"),
+    ]
+
     author = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='author')
     title = models.CharField(max_length=100)
     description = models.TextField(null=True, blank=True)
@@ -21,7 +29,7 @@ class Task(models.Model):
     status = models.CharField(max_length=50, choices=STATUS_CHOICES)
     received = models.DateField(null=True, blank=True)
     deadline = models.DateTimeField(null=True, blank=True)
-    degree = models.IntegerField(null=True, blank=True)
+    degree = models.CharField(max_length=50, choices=DEGREE_CHOICES, default='medium')
     archived = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     edited_at = models.DateTimeField(auto_now=True)

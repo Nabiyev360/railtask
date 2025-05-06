@@ -2,7 +2,6 @@ from datetime import datetime
 from django.utils import timezone
 from datetime import timedelta
 
-from django.db.models import Q
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
@@ -11,17 +10,13 @@ from django.contrib import messages
 from profiles.models import Profile
 from .models import Task, TaskComment
 from .services import send_task_tg_users
+from django.http import JsonResponse
 
 
 @login_required
 def index_view(request):
     return redirect('/tasks/')
 
-
-from django.views.generic import ListView
-from django.utils import timezone
-from datetime import timedelta
-from django.shortcuts import render
 
 class TaskListView(ListView):
     def get(self, request, *args, **kwargs):
@@ -36,14 +31,30 @@ class TaskListView(ListView):
         else:
             tasks = tasks.filter(performers=profile)
 
+        expired_tasks = tasks.filter(deadline__lt=timezone.now()).exclude(status='completed')
+
+        counts = {
+            "all": tasks.count(),
+            "expired": expired_tasks.count(),
+            "in_progress": tasks.filter(status='in_progress').count(),
+            "completed": tasks.filter(status='completed').count(),
+
+            "info": tasks.filter(degree='info').count(),
+            "medium": tasks.filter(degree='medium').count(),
+            "important": tasks.filter(degree='important').count(),
+            "very_important": tasks.filter(degree='very_important').count(),
+            "urgent": tasks.filter(degree='urgent').count(),
+        }
+
         status = request.GET.get('status')
-        expired_tasks = tasks.filter(deadline__lt=timezone.now())
+        degree = request.GET.get('degree')
         if status == 'expired':
             tasks = expired_tasks
         elif status in ['in_progress', 'completed']:
             tasks = tasks.filter(status=status)
+        elif degree:
+            tasks = tasks.filter(degree=degree)
 
-        # Grouping
         grouped_tasks = {}
         for task in tasks.order_by('deadline'):
             if task.deadline.date() == today:
@@ -56,7 +67,6 @@ class TaskListView(ListView):
                 key = 'Muddatsiz'
             grouped_tasks.setdefault(key, []).append(task)
 
-        # Performers ro‘yxati (filtrlangan)
         exclude_role_names = ['tchzg']
         performers = Profile.objects.exclude(roles__name__in=exclude_role_names)
 
@@ -64,6 +74,8 @@ class TaskListView(ListView):
             'grouped_tasks': grouped_tasks,
             'performers': performers,
             'expired_tasks': expired_tasks,
+            'counts': counts,
+            'workers': Profile.objects.all(),
         })
 
 
@@ -111,3 +123,13 @@ def task_comment_view(request, task_id):
             task=task,
             comment=comment)
     return redirect('/tasks/')
+
+
+def update_status_view(request, task_id):
+    task = Task.objects.get(id=task_id)
+    if task.status == 'completed':
+        task.status = 'in_progress'
+    else:
+        task.status = request.GET.get('status')
+    task.save()
+    return JsonResponse({'status': task.status})

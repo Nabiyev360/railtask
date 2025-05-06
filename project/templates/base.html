@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="keyword" content="">
-    <meta name="author" content="WRAPCODERS">
+    <meta name="author" content="NABIYEVDEV">
     <!--! The above 6 meta tags *must* come first in the head; any other head content must come *after* these tags !-->
     <!--! BEGIN: Apps Title-->
     <title>RailTask</title>
@@ -87,8 +87,10 @@
 <!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-email.html">Email</a></li>-->
                             {%  if request.user.profile.position == "Bosh muhandis o'rinbosari" %}
                                 <li class="nxl-item"><a class="nxl-link" href="/tasks">Mening topshiriqlarim</a></li>
+                                <li class="nxl-item"><a class="nxl-link" href="/tasks/workers">Xodimlar bo'yicha</a></li>
+
                             {%  endif %}
-                            <li class="nxl-item"><a class="nxl-link" href="/tasks">Bajarish kerak</a></li>
+                            <li class="nxl-item"><a class="nxl-link" href="/tasks">Bajarishim kerak</a></li>
 <!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-storage.html">Storage</a></li>-->
 <!--                            <li class="nxl-item"><a class="nxl-link" href="../../../../Frontend/duralux-crm-admin-dashboard-bootstrap-template-2024-10-30-15-06-29-utc/client_version/duralux/html/crm/dist/templates/apps-calendar.html">Calendar</a></li>-->
                         </ul>
@@ -298,9 +300,9 @@
                     <a href="javascript:void(0);" id="menu-mini-button">
                         <i class="feather-align-left"></i>
                     </a>
-{#                    <a href="javascript:void(0);" id="menu-expend-button">#}
-{#                        <i class="feather-arrow-right"></i>#}
-{#                    </a>#}
+                    <a href="javascript:void(0);" id="menu-expend-button" style="display: none;">
+                        <i class="feather-arrow-right"></i>
+                    </a>
                 </div>
                 <!--! [End] nxl-navigation-toggle !-->
                 <!--! [Start] nxl-lavel-mega-menu-toggle !-->
@@ -564,7 +566,7 @@
                         <a href="javascript:void(0);" class="nxl-head-link me-0 dark-button">
                             <i class="feather-moon"></i>
                         </a>
-                        <a href="javascript:void(0);" class="nxl-head-link me-0 light-button">
+                        <a href="javascript:void(0);" class="nxl-head-link me-0 light-button" style="display: none;">
                             <i class="feather-sun"></i>
                         </a>
                     </div>
@@ -610,7 +612,7 @@
                             <div class="notifications-item">
                                 <img src="{% static 'assets/images/avatar/4.png' %}" alt="" class="rounded me-3 border">
                                 <div class="notifications-desc">
-                                    <a href="javascript:void(0);" class="font-body text-truncate-2-line"> <span class="fw-semibold text-dark">{{ expired_task.title }}</span> {{ expired_task.description }}</a>
+                                    <a href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#tasksDetailsOffcanvas{{expired_task.id}}" class="font-body text-truncate-2-line"> <span class="fw-semibold text-dark">{{ expired_task.title }}</span> {{ expired_task.description }}</a>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="notifications-date text-muted border-bottom border-bottom-dashed">{{ expired_task.deadline|date:'d.m.Y H:i' }}</div>
                                         <div class="d-flex align-items-center float-end gap-2">
@@ -631,7 +633,9 @@
                     <div class="dropdown nxl-h-item">
                         <a class="nxl-head-link me-3" data-bs-toggle="dropdown" href="#" role="button" data-bs-auto-close="outside">
                             <i class="feather-bell"></i>
-                            <span class="badge bg-danger nxl-h-badge">3</span>
+                        {% if messages|length != 0 %}
+                            <span class="badge bg-danger nxl-h-badge">{{ messages|length }}</span>
+                        {% endif %}
                         </a>
                         <div class="dropdown-menu dropdown-menu-end nxl-h-dropdown nxl-notifications-menu">
                             <div class="d-flex justify-content-between align-items-center notifications-head">
@@ -641,10 +645,11 @@
                                     <span>Barchasi o'qildi</span>
                                 </a>
                             </div>
+                            {% for msg in messages %}
                             <div class="notifications-item">
                                 <img src="{% static 'assets/images/avatar/2.png' %}" alt="" class="rounded me-3 border">
                                 <div class="notifications-desc">
-                                    <a href="javascript:void(0);" class="font-body text-truncate-2-line"> <span class="fw-semibold text-dark">Malanie Hanvey</span> We should talk about that at lunch!</a>
+                                    <a href="javascript:void(0);" class="font-body text-truncate-2-line"> <span class="fw-semibold text-dark">Yangi topshiriq</span> Sizga yangi topshiriq biriktirildi!</a>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="notifications-date text-muted border-bottom border-bottom-dashed">2 minutes ago</div>
                                         <div class="d-flex align-items-center float-end gap-2">
@@ -656,36 +661,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="notifications-item">
-                                <img src="{% static 'assets/images/avatar/3.png' %}" alt="" class="rounded me-3 border">
-                                <div class="notifications-desc">
-                                    <a href="javascript:void(0);" class="font-body text-truncate-2-line"> <span class="fw-semibold text-dark">Valentine Maton</span> You can download the latest invoices now.</a>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="notifications-date text-muted border-bottom border-bottom-dashed">36 minutes ago</div>
-                                        <div class="d-flex align-items-center float-end gap-2">
-                                            <a href="javascript:void(0);" class="d-block wd-8 ht-8 rounded-circle bg-gray-300" data-bs-toggle="tooltip" title="Make as Read"></a>
-                                            <a href="javascript:void(0);" class="text-danger" data-bs-toggle="tooltip" title="Remove">
-                                                <i class="feather-x fs-12"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="notifications-item">
-                                <img src="{% static 'assets/images/avatar/4.png' %}" alt="" class="rounded me-3 border">
-                                <div class="notifications-desc">
-                                    <a href="javascript:void(0);" class="font-body text-truncate-2-line"> <span class="fw-semibold text-dark">Archie Cantones</span> Don't forget to pickup Jeremy after school!</a>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="notifications-date text-muted border-bottom border-bottom-dashed">53 minutes ago</div>
-                                        <div class="d-flex align-items-center float-end gap-2">
-                                            <a href="javascript:void(0);" class="d-block wd-8 ht-8 rounded-circle bg-gray-300" data-bs-toggle="tooltip" title="Make as Read"></a>
-                                            <a href="javascript:void(0);" class="text-danger" data-bs-toggle="tooltip" title="Remove">
-                                                <i class="feather-x fs-12"></i>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            {% endfor %}
                             <div class="text-center notifications-footer">
                                 <a href="javascript:void(0);" class="fs-13 fw-semibold text-dark">Barcha bildirishnomalar</a>
                             </div>
@@ -838,7 +814,6 @@
     <!--! ================================================================ !-->
     <!--! [End] Header !-->
     <!--! ================================================================ !-->
-    <!--! ================================================================ !-->
     <!--! [Start] Main Content !-->
     <!--! ================================================================ !-->
 
@@ -846,7 +821,6 @@
     {% endblock %}
     <!--! ================================================================ !-->
     <!--! [End] Main Content !-->
-    <!--! ================================================================ !-->
     <!--! ================================================================ !-->
 
     <!--! [Start] Search Modal !-->
@@ -1226,12 +1200,6 @@
         </div>
     </div>
 
-    <!--! ================================================================ !-->
-    <!--! [End] Theme Customizer !-->
-    <!--! ================================================================ !-->
-    <!--! ================================================================ !-->
-    <!--! Footer Script !-->
-    <!--! ================================================================ !-->
     <!--! BEGIN: Vendors JS !-->
     <script src="{% static 'assets/vendors/js/vendors.min.js' %}"></script>
     <!-- vendors.min.js {always must need to be top} -->
@@ -1248,8 +1216,11 @@
     <script src="{% static 'assets/js/theme-customizer-init.min.js' %}"></script>
     <!--! END: Theme Customizer !-->
     <!--! Checklist JS !-->
+
+    {% block page_js %}
+    {% endblock %}
+
     <script>
-        // Create a "close" button and append it to each list item
         var myNodelist = document.querySelectorAll("#checklist> li");
         var i;
         for (i = 0; i < myNodelist.length; i++) {
@@ -1260,7 +1231,6 @@
             myNodelist[i].appendChild(span);
         }
 
-        // Click on a close button to hide the current list item
         var close = document.getElementsByClassName("close");
         var i;
         for (i = 0; i < close.length; i++) {
@@ -1270,7 +1240,6 @@
             };
         }
 
-        // Add a "checked" symbol when clicking on a list item
         var list = document.getElementById("checklist");
         list.addEventListener(
             "click",
@@ -1282,7 +1251,6 @@
             false
         );
 
-        // Create a new list item when clicking on the "Add" button
         function newElement() {
             var li = document.createElement("li");
             var inputValue = document.getElementById("checklistInput").value;

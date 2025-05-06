@@ -6,130 +6,18 @@
 <main class="nxl-container apps-container apps-tasks">
     <div class="nxl-content without-header nxl-full-content">
         <div class="main-content d-flex">
-            <!-- [ Content Sidebar ] start -->
-            <div class="content-sidebar content-sidebar-md" data-scrollbar-target="#psScrollbarInit">
-                <div class="content-sidebar-header bg-white sticky-top hstack justify-content-between">
-                    <h4 class="fw-bolder mb-0">Topshiriqlar</h4>
-                    <a href="javascript:void(0);" class="app-sidebar-close-trigger d-flex">
-                        <i class="feather-x"></i>
-                    </a>
-                </div>
-<!--                <div class="content-sidebar-header">-->
-<!--                    <a href="javascript:void(0);" class="btn btn-primary w-100" data-bs-toggle="modal"-->
-<!--                       data-bs-target="#addNewTasks">-->
-<!--                        <i class="feather-plus me-2"></i>-->
-<!--                        <span>Qo'shish</span>-->
-<!--                    </a>-->
-<!--                </div>-->
-                <div class="content-sidebar-body">
-                    <ul class="nav flex-column nxl-content-sidebar-item">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'tasks:task_list' %}">
-                                <i class="feather-list"></i>
-                                <span>Barchasi</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'tasks:task_list' %}?status=expired">
-                                <i class="feather-watch"></i>
-                                <span>Muddati o'tgan</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'tasks:task_list' %}?status=in_progress">
-                                <i class="feather-activity"></i>
-                                <span>Jarayonda</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'tasks:task_list' %}?status=completed">
-                                <i class="feather-check-circle"></i>
-                                <span>Bajarilgan</span>
-                            </a>
-                        </li>
-                    </ul>
-                    <ul class="nav flex-column nxl-content-sidebar-item">
-                        <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">
-                            <span>Darajasi</span>
-                            <a href="javascript:void(0);">
-                                <span class="avatar-text avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                      title="Add New"> <i class="feather-plus"></i> </span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <span class="wd-7 ht-7 bg-dark rounded-circle"></span>
-                                <span>Ma'lumot uchun</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <span class="wd-7 ht-7 bg-success rounded-circle"></span>
-                                <span>O'rtacha</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <span class="wd-7 ht-7 bg-primary rounded-circle"></span>
-                                <span>Muhim</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <span class="wd-7 ht-7 bg-warning rounded-circle"></span>
-                                <span>Juda muhim</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="javascript:void(0);">
-                                <span class="wd-7 ht-7 bg-danger rounded-circle"></span>
-                                <span>Tezkor</span>
-                            </a>
-                        </li>
-                    </ul>
-<!--                    <ul class="nav flex-column nxl-content-sidebar-item">-->
-<!--                        <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">-->
-<!--                            <span>Overview</span>-->
-<!--                            <a href="javascript:void(0);">-->
-<!--                                <span class="avatar-text avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover"-->
-<!--                                      title="Add New"> <i class="feather-plus"></i> </span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Umumiy</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Mening topshiriqlarim</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Jamoaviy</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Induvidal</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                    </ul>-->
-                </div>
-            </div>
-            <!-- [ Content Sidebar  ] end -->
+            {% if 'workers' in request.path %}
+                {% include 'tasks/tasks-workers-sidebar.html' %}
+            {% else %}
+                {% include 'tasks/tasks-filters-sidebar.html' %}
+            {% endif %}
             <!-- [ Main Area  ] start -->
             <div class="content-area" data-scrollbar-target="#psScrollbarInit">
-<!--                <div class="content-area-header sticky-top">-->
-<!--                    <div class="page-header-left d-flex align-items-center gap-2">-->
-<!--                        <a href="javascript:void(0);" class="app-sidebar-open-trigger me-2">-->
-<!--                            <i class="feather-align-left fs-20"></i>-->
-<!--                        </a>-->
+                <div class="content-area-header sticky-top">
+                    <div class="page-header-left d-flex align-items-center gap-2">
+                        <a href="javascript:void(0);" class="app-sidebar-open-trigger me-2">
+                            <i class="feather-align-left fs-20"></i>
+                        </a>
 <!--                        <div class="dropdown">-->
 <!--                            <a href="javascript:void(0)" class="btn btn-light-brand dropdown-toggle"-->
 <!--                               data-bs-toggle="dropdown" data-bs-offset="0,16">-->
@@ -331,29 +219,29 @@
 <!--                                </a>-->
 <!--                            </div>-->
 <!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="page-header-right ms-auto">-->
-<!--                        <div class="hstack gap-2">-->
-<!--                            <div class="hstack">-->
-<!--                                <a href="javascript:void(0)" class="search-form-open-toggle">-->
-<!--                                    <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover"-->
-<!--                                         title="Search">-->
-<!--                                        <i class="feather-search"></i>-->
-<!--                                    </div>-->
-<!--                                </a>-->
-<!--                                <form class="search-form" style="display: none">-->
-<!--                                    <div class="search-form-inner">-->
-<!--                                        <a href="javascript:void(0)" class="search-form-close-toggle">-->
-<!--                                            <div class="avatar-text avatar-md" data-bs-toggle="tooltip"-->
-<!--                                                 data-bs-trigger="hover" title="Search Close">-->
-<!--                                                <i class="feather-arrow-left"></i>-->
-<!--                                            </div>-->
-<!--                                        </a>-->
-<!--                                        <input type="search" class="py-3 px-0 border-0 w-100" id="tasksSearch"-->
-<!--                                               placeholder="Search...">-->
-<!--                                    </div>-->
-<!--                                </form>-->
-<!--                            </div>-->
+                    </div>
+                    <div class="page-header-right ms-auto">
+                        <div class="hstack gap-2">
+                            <div class="hstack">
+                                <a href="javascript:void(0)" class="search-form-open-toggle">
+                                    <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                         title="Search">
+                                        <i class="feather-search"></i>
+                                    </div>
+                                </a>
+                                <form class="search-form" style="display: none">
+                                    <div class="search-form-inner">
+                                        <a href="javascript:void(0)" class="search-form-close-toggle">
+                                            <div class="avatar-text avatar-md" data-bs-toggle="tooltip"
+                                                 data-bs-trigger="hover" title="Search Close">
+                                                <i class="feather-arrow-left"></i>
+                                            </div>
+                                        </a>
+                                        <input type="search" class="py-3 px-0 border-0 w-100" id="tasksSearch"
+                                               placeholder="Search...">
+                                    </div>
+                                </form>
+                            </div>
 <!--                            <a href="javascript:void(0)" class="d-none d-sm-flex">-->
 <!--                                <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover"-->
 <!--                                     title="Newest">-->
@@ -383,19 +271,19 @@
 <!--                                    <li><a class="dropdown-item" href="javascript:void(0)">Descending</a></li>-->
 <!--                                </ul>-->
 <!--                            </div>-->
-<!--                            <div class="dropdown d-none d-sm-flex">-->
-<!--                                <a href="javascript:void(0)" class="d-flex" data-bs-toggle="dropdown"-->
-<!--                                   data-bs-offset="0,22" data-bs-auto-close="outside">-->
-<!--                                    <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover"-->
-<!--                                         title="More Options">-->
-<!--                                        <i class="feather-more-vertical"></i>-->
-<!--                                    </div>-->
-<!--                                </a>-->
-<!--                                <div class="dropdown-menu dropdown-menu-end">-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-plus me-3"></i>-->
-<!--                                        <span>Add to Group</span>-->
-<!--                                    </a>-->
+                            <div class="dropdown d-none d-sm-flex">
+                                <a href="javascript:void(0)" class="d-flex" data-bs-toggle="dropdown"
+                                   data-bs-offset="0,22" data-bs-auto-close="outside">
+                                    <div class="avatar-text avatar-md" data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                         title="More Options">
+                                        <i class="feather-more-vertical"></i>
+                                    </div>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-end">
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i class="feather-plus me-3"></i>
+                                        <span>Qo'shish</span>
+                                    </a>
 <!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
 <!--                                        <i class="feather-user-plus me-3"></i>-->
 <!--                                        <span>Add to Contact</span>-->
@@ -434,15 +322,15 @@
 <!--                                        <i class="feather-slash me-3"></i>-->
 <!--                                        <span>Block Conversion</span>-->
 <!--                                    </a>-->
-<!--                                    <a href="javascript:void(0);" class="dropdown-item">-->
-<!--                                        <i class="feather-trash-2 me-3"></i>-->
-<!--                                        <span>Delete Conversion</span>-->
-<!--                                    </a>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
+                                    <a href="javascript:void(0);" class="dropdown-item">
+                                        <i class="feather-trash-2 me-3"></i>
+                                        <span>Arxiv</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="content-area-body" style="min-height: 93%;">
                     {% if request.user.profile.position == "Bosh muhandis o'rinbosari" %}
                     <div class="card stretch stretch-full">
@@ -461,19 +349,20 @@
                         <div class="card-body collapse show" id="tasks_collapse_{{forloop.counter}}">
                             <ul class="list-unstyled mb-0">
                                 {% for task in tasks %}
-                                <li class="single-task-list p-3 mb-3 border border-dashed rounded-3">
+                                <li class="single-task-list p-3 mb-3 border border-dashed rounded-3 {% if task.status == 'completed' %} task-completed {% endif %}">
                                     <div class="d-flex align-items-center justify-content-between">
                                         <div class="d-flex align-items-center gap-3 me-3">
                                             <div class="custom-control custom-checkbox me-2">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="customCheckTask{{task.id}}" data-checked-action="task-action">
+                                                <input type="checkbox" class="custom-control-input complete-checkbox"
+                                                       id="customCheckTask{{task.id}}" data-checked-action="task-action"
+                                                       data-id="{{ task.id }}" {% if task.status == 'completed' %} checked {% endif %}>
                                                 <label class="custom-control-label c-pointer"
                                                        for="customCheckTask{{task.id}}"></label>
                                             </div>
                                             <div class="d-flex align-items-center gap-3">
                                                 <a href="javascript:void(0);" class="single-task-list-link"
                                                    data-bs-toggle="offcanvas" data-bs-target="#tasksDetailsOffcanvas{{task.id}}">
-                                                    <div class="fs-13 fw-bold text-truncate-1-line">{{ task.title }}<span class="ms-2 badge bg-soft-danger text-danger">Muhim</span>
+                                                    <div class="fs-13 fw-bold text-truncate-1-line">{{ task.title }}<span class="ms-2 badge bg-soft-danger text-danger">{{ task.get_degree_display }}</span>
                                                     </div>
                                                     <div class="fs-12 fw-normal text-muted text-truncate-1-line">{{ task.description }}
                                                     </div>
@@ -717,11 +606,11 @@
                     <div class="form-group mb-4">
                         <label class="form-label">Muhimlik darajasi</label>
                         <select class="form-select form-control" name="degree" data-select2-selector="priority" required>
-                            <option value="5" data-bg="bg-primary">Ma'lumot uchun</option>
-                            <option value="4" data-bg="bg-teal">Keyingi o'rinda</option>
-                            <option value="3" data-bg="bg-success">O'rtacha</option>
-                            <option value="2" data-bg="bg-warning" selected>Muhim</option>
-                            <option value="1" data-bg="bg-danger">Tezkor</option>
+                            <option value="info" data-bg="bg-primary">Ma'lumot uchun</option>
+                            <option value="medium" data-bg="bg-teal">Keyingi o'rinda</option>
+                            <option value="important" data-bg="bg-success">O'rtacha</option>
+                            <option value="very_important" data-bg="bg-warning" selected>Muhim</option>
+                            <option value="urgent" data-bg="bg-danger">Tezkor</option>
                         </select>
                     </div>
     <!--                <div class="form-group mb-0">-->
@@ -1098,4 +987,9 @@
 <!--! [End] Tasks Details Offcanvas !-->
 <!--! ================================================================ !-->
 <!--! ================================================================ !-->
+{% endblock %}
+
+
+{% block page_js %}
+    <script src="{% static 'assets/js/railtask.js' %}"></script>
 {% endblock %}
