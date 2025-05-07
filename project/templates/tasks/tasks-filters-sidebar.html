@@ -79,6 +79,7 @@
                             </a>
                         </li>
                     </ul>
+                    {% if request.user.profile.position == "Bosh muhandis o'rinbosari" %}
                     <ul class="nav flex-column nxl-content-sidebar-item">
                         <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">
                             <span>Ishchilar bo'yicha</span>
@@ -96,6 +97,7 @@
                         </li>
                         {% endfor %}
                     </ul>
+                    {% endif %}
                 </div>
             </div>
             <!-- [ Content Sidebar  ] end -->

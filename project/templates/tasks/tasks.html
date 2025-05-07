@@ -385,8 +385,7 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item view-task" href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#tasksDetailsOffcanvas{{task.id}}">Ko'rish</a>
-                                                    <a class="dropdown-item edit-task" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editTasks" data-id="{{ task.id }}">O'zgaritish</a>
-
+                                                    <a class="dropdown-item edit-task" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editTask" data-id="{{ task.id }}">O'zgaritish</a>
                                                     <a class="dropdown-item delete-task" href="{% url 'tasks:delete_task' task.id %}">O'chirish</a>
                                                 </div>
                                             </div>
@@ -636,59 +635,80 @@
 <!--! [End] Add New task Modal !-->
 
 <!--! [Start] Edit task Modal !-->
-<div class="modal fade" id="editTasks" tabindex="-1">
+<div class="modal fade" id="editTask" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Topshiriqni o'zgartirish</h5>
+                <h5 class="modal-title">Yangi topshiriq yaratish</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form method="post">
+            <form action="{% url 'tasks:create_task' %}" method="post">
                 {% csrf_token %}
                 <div class="modal-body">
                     <div class="mb-4">
-                        <label for="editTaskName" class="form-label">Topshiriq nomi</label>
+                        <label for="taskName" class="form-label">Topshiriq nomi</label>
                         <input type="text" id="editTaskName" name="title" class="form-control" placeholder="Topshiriq nomini kiriting" required>
+    <!--                    <small class="text-muted">Tasks name for your todo</small>-->
                     </div>
                     <div class="mb-4">
                         <label class="form-label">To'liq matni</label>
-                        <textarea id="editTaskDescription" rows="5" class="form-control" maxlength="200" name="description" placeholder="Topshiriqning batafsil matni"></textarea>
+                        <textarea id="editTaskDescription" rows="5"  class="form-control" maxlength="200" name="description" placeholder="Topshiriqning batafsil matni"></textarea>
                         <small class="text-muted">Maksimal 200 ta belgi</small>
                     </div>
                     <div class="form-group mb-4">
                         <label class="form-label">Ijrochilar:</label>
-                        <select id="editTaskPerformers" class="form-select form-control" name="performers" data-select2-selector="user" multiple required>
+                        <select class="form-select form-control" name="performers" data-select2-selector="user" multiple required id="editTaskPerformers">
                             {% for performer in performers %}
                             <option value="{{ performer.id }}" data-user="{{ performer.id }}">{{ performer.full_name }}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    <div id="editTaskDateRangeAdd" class="mb-4">
+                    <div id="EditTaskDateRangeAdd" class="mb-4">
                         <label class="form-label">Topshiriq muddati</label>
                         <div class="input-group date input-daterange">
-                            <input type="datetime-local" id="editTaskDeadline" class="form-control" placeholder="gacha" name="deadline" autocomplete="off" required>
+                            <input id="editTaskDeadline" type="datetime-local" class="form-control" placeholder="gacha" name="deadline" autocomplete="off" required>
                         </div>
                     </div>
+    <!--                <div class="form-group mb-4">-->
+    <!--                    <label class="form-label">Status:</label>-->
+    <!--                    <select class="form-control" data-select2-selector="status">-->
+    <!--                        <option value="primary" data-bg="bg-primary" selected>Inprogress</option>-->
+    <!--                        <option value="secondary" data-bg="bg-secondary">Pending</option>-->
+    <!--                        <option value="success" data-bg="bg-success">Completed</option>-->
+    <!--                        <option value="danger" data-bg="bg-danger">Rejected</option>-->
+    <!--                        <option value="warning" data-bg="bg-warning">Upcoming</option>-->
+    <!--                    </select>-->
+    <!--                </div>-->
                     <div class="form-group mb-4">
                         <label class="form-label">Muhimlik darajasi</label>
-                        <select id="editTaskDegree" class="form-select form-control" name="degree" data-select2-selector="priority" required>
-                            <option value="info">Ma'lumot uchun</option>
-                            <option value="medium">Keyingi o'rinda</option>
-                            <option value="important">O'rtacha</option>
-                            <option value="very_important">Muhim</option>
-                            <option value="urgent">Tezkor</option>
+                        <select class="form-select form-control" name="degree" data-select2-selector="priority" required>
+                            <option value="info" data-bg="bg-primary">Ma'lumot uchun</option>
+                            <option value="medium" data-bg="bg-teal">Keyingi o'rinda</option>
+                            <option value="important" data-bg="bg-success">O'rtacha</option>
+                            <option value="very_important" data-bg="bg-warning" selected>Muhim</option>
+                            <option value="urgent" data-bg="bg-danger">Tezkor</option>
                         </select>
                     </div>
+    <!--                <div class="form-group mb-0">-->
+    <!--                    <label class="form-label">Tags:</label>-->
+    <!--                    <select class="form-select form-control" data-select2-selector="tag" multiple>-->
+    <!--                        <option value="primary" data-bg="bg-primary">Team</option>-->
+    <!--                        <option value="teal" data-bg="bg-teal">Primary</option>-->
+    <!--                        <option value="success" data-bg="bg-success">Updates</option>-->
+    <!--                        <option value="warning" data-bg="bg-warning" selected>Personal</option>-->
+    <!--                        <option value="danger" data-bg="bg-danger">Promotions</option>-->
+    <!--                        <option value="indigo" data-bg="bg-indigo">Customs</option>-->
+    <!--                    </select>-->
+    <!--                </div>-->
                 </div>
                 <div class="modal-footer">
                     <button type="reset" class="btn btn-danger" data-bs-dismiss="modal">Bekor qilish</button>
-                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                    <button type="submit" class="btn btn-primary">Tasdiqlash</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 <!--! [End] Edit task Modal !-->
 
 <!--! ================================================================ !-->
