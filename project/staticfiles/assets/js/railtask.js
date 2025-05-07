@@ -24,3 +24,37 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.edit-task');
+    editButtons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const taskId = this.getAttribute('data-id');
+            fetch(`/tasks/${taskId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Formani to'ldirish
+                    document.getElementById('editTaskName').value = data.title;
+                    document.getElementById('editTaskDescription').value = data.description;
+                    document.getElementById('editTaskDeadline').value = data.deadline;
+
+                    // Muhimlik darajasi
+                    document.getElementById("editTaskDegree").value = data.degree;
+
+                    // Ijrochilar
+                    const performersSelect = document.getElementById('editTaskPerformers');
+                    [...performersSelect.options].forEach(opt => {
+                        opt.selected = data.performers.includes(parseInt(opt.value));
+                    });
+
+                    // Forma action-ni o'zgartirish
+                    document.querySelector('#editTasks form').action = `/tasks/edit/${taskId}/`;
+                })
+                .catch(error => {
+                    console.error('Xatolik:', error);
+                });
+        });
+    });
+});

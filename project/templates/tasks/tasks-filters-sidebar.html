@@ -42,7 +42,7 @@
                     </ul>
                     <ul class="nav flex-column nxl-content-sidebar-item">
                         <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">
-                            <span>Darajasi</span>
+                            <span>Daraja bo'yicha</span>
 <!--                            <a href="#">-->
 <!--                                <span class="avatar-text avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover"-->
 <!--                                      title="Add New"> <i class="feather-plus"></i> </span>-->
@@ -79,39 +79,23 @@
                             </a>
                         </li>
                     </ul>
-<!--                    <ul class="nav flex-column nxl-content-sidebar-item">-->
-<!--                        <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">-->
-<!--                            <span>Overview</span>-->
+                    <ul class="nav flex-column nxl-content-sidebar-item">
+                        <li class="px-4 my-2 fs-10 fw-bold text-uppercase text-muted text-spacing-1 d-flex align-items-center justify-content-between">
+                            <span>Ishchilar bo'yicha</span>
 <!--                            <a href="javascript:void(0);">-->
 <!--                                <span class="avatar-text avatar-sm" data-bs-toggle="tooltip" data-bs-trigger="hover"-->
 <!--                                      title="Add New"> <i class="feather-plus"></i> </span>-->
 <!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Umumiy</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Mening topshiriqlarim</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Jamoaviy</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="javascript:void(0);">-->
-<!--                                <i class="feather-hash"></i>-->
-<!--                                <span>Induvidal</span>-->
-<!--                            </a>-->
-<!--                        </li>-->
-<!--                    </ul>-->
+                        </li>
+                        {% for worker, task_count in workers_task_count.items %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/tasks/?worker_id={{worker.id}}">
+                                <i class="bi bi-person-circle"></i>
+                                <span>{{ worker.full_name }} | {{ task_count }}</span>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
             <!-- [ Content Sidebar  ] end -->

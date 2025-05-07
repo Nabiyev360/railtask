@@ -385,7 +385,8 @@
                                                 </a>
                                                 <div class="dropdown-menu dropdown-menu-end">
                                                     <a class="dropdown-item view-task" href="javascript:void(0);" data-bs-toggle="offcanvas" data-bs-target="#tasksDetailsOffcanvas{{task.id}}">Ko'rish</a>
-                                                    <a class="dropdown-item edit-task" href="#">O'zgaritish</a>
+                                                    <a class="dropdown-item edit-task" href="javascript:void(0);" data-bs-toggle="modal" data-bs-target="#editTasks" data-id="{{ task.id }}">O'zgaritish</a>
+
                                                     <a class="dropdown-item delete-task" href="{% url 'tasks:delete_task' task.id %}">O'chirish</a>
                                                 </div>
                                             </div>
@@ -558,7 +559,6 @@
 
 
 <!--! [Start] Add New task Modal !-->
-<!--! ================================================================ !-->
 <div class="modal fade" id="addNewTasks" tabindex="-1">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -633,9 +633,64 @@
         </div>
     </div>
 </div>
-<!--! ================================================================ !-->
 <!--! [End] Add New task Modal !-->
-<!--! ================================================================ !-->
+
+<!--! [Start] Edit task Modal !-->
+<div class="modal fade" id="editTasks" tabindex="-1">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Topshiriqni o'zgartirish</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-4">
+                        <label for="editTaskName" class="form-label">Topshiriq nomi</label>
+                        <input type="text" id="editTaskName" name="title" class="form-control" placeholder="Topshiriq nomini kiriting" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">To'liq matni</label>
+                        <textarea id="editTaskDescription" rows="5" class="form-control" maxlength="200" name="description" placeholder="Topshiriqning batafsil matni"></textarea>
+                        <small class="text-muted">Maksimal 200 ta belgi</small>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="form-label">Ijrochilar:</label>
+                        <select id="editTaskPerformers" class="form-select form-control" name="performers" data-select2-selector="user" multiple required>
+                            {% for performer in performers %}
+                            <option value="{{ performer.id }}" data-user="{{ performer.id }}">{{ performer.full_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div id="editTaskDateRangeAdd" class="mb-4">
+                        <label class="form-label">Topshiriq muddati</label>
+                        <div class="input-group date input-daterange">
+                            <input type="datetime-local" id="editTaskDeadline" class="form-control" placeholder="gacha" name="deadline" autocomplete="off" required>
+                        </div>
+                    </div>
+                    <div class="form-group mb-4">
+                        <label class="form-label">Muhimlik darajasi</label>
+                        <select id="editTaskDegree" class="form-select form-control" name="degree" data-select2-selector="priority" required>
+                            <option value="info">Ma'lumot uchun</option>
+                            <option value="medium">Keyingi o'rinda</option>
+                            <option value="important">O'rtacha</option>
+                            <option value="very_important">Muhim</option>
+                            <option value="urgent">Tezkor</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="reset" class="btn btn-danger" data-bs-dismiss="modal">Bekor qilish</button>
+                    <button type="submit" class="btn btn-primary">Saqlash</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--! [End] Edit task Modal !-->
+
 <!--! ================================================================ !-->
 <!--! [Start] Tasks Details Offcanvas !-->
 <!--! ================================================================ !-->

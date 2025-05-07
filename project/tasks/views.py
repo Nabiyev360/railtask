@@ -10,7 +10,7 @@ from django.contrib import messages
 from profiles.models import Profile
 from .models import Task, TaskComment
 from .services import send_task_tg_users
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 
 
 @login_required
@@ -46,14 +46,25 @@ class TaskListView(ListView):
             "urgent": tasks.filter(degree='urgent').count(),
         }
 
+        workers = Profile.objects.all().exclude(position="Bosh muhandis o'rinbosari")
+        workers_task_count = {}
+        for worker in workers:
+            workers_task_count[worker] = tasks.filter(performers=worker).count()
+
+        workers_task_count = dict(sorted(workers_task_count.items(), key=lambda item: item[1], reverse=True))   # sort by task count
+
         status = request.GET.get('status')
         degree = request.GET.get('degree')
+        worker_id = request.GET.get('worker_id')
         if status == 'expired':
             tasks = expired_tasks
         elif status in ['in_progress', 'completed']:
             tasks = tasks.filter(status=status)
         elif degree:
             tasks = tasks.filter(degree=degree)
+        elif worker_id:
+            worker = Profile.objects.get(id=worker_id)
+            tasks = tasks.filter(performers=worker)
 
         grouped_tasks = {}
         for task in tasks.order_by('deadline'):
@@ -75,7 +86,7 @@ class TaskListView(ListView):
             'performers': performers,
             'expired_tasks': expired_tasks,
             'counts': counts,
-            'workers': Profile.objects.all(),
+            'workers_task_count': workers_task_count
         })
 
 
@@ -133,3 +144,35 @@ def update_status_view(request, task_id):
         task.status = request.GET.get('status')
     task.save()
     return JsonResponse({'status': task.status})
+
+
+
+def task_detail_view(request, task_id):
+    try:
+        task = Task.objects.get(id=task_id)
+    except Task.DoesNotExist:
+        raise Http404("Topshiriq topilmadi")
+
+    return JsonResponse({
+        'title': task.title,
+        'description': task.description,
+        'deadline': task.deadline.strftime('%Y-%m-%dT%H:%M'),
+        'degree': task.degree,
+        'performers': list(task.performers.values_list('id', flat=True)),
+    })
+
+def edit_task_view(request, task_id):
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        deadline = request.POST.get('deadline')
+        degree = request.POST.get('degree')
+        performer_ids = request.POST.getlist('performers')
+        task = Task.objects.get(id=task_id)
+        task.title = title
+        task.description = description
+        task.deadline = deadline
+        task.degree = degree
+        task.performers = performer_ids
+        task.save()
+    return redirect('/tasks/')
