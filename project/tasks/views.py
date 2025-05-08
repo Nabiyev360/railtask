@@ -168,6 +168,8 @@ def edit_task_view(request, task_id):
         deadline = request.POST.get('deadline')
         degree = request.POST.get('degree')
         performer_ids = request.POST.getlist('performers')
+
+
         task = Task.objects.get(id=task_id)
         task.title = title
         task.description = description
@@ -175,4 +177,7 @@ def edit_task_view(request, task_id):
         task.degree = degree
         task.performers = performer_ids
         task.save()
+        send_task_tg_users(task)
     return redirect('/tasks/')
+
+
